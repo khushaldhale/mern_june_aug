@@ -41,6 +41,96 @@ exports.createTask = async (req, res) => {
 }
 
 
-exports.getAllTask = () => {
+exports.getAllTask = async (req, res) => {
+
+	const response = await taskSchema.find({});
+
+	return res.status(200)
+		.json({
+			success: true,
+			message: "all tasks are fetched succesfully",
+			data: response
+		})
+
+}
+
+
+
+//    if  any errror occurs then  the programs is terminated and server stops working 
+//  so no more reqest will be handled 
+
+//  so we have to habdle the errors with the help of exception handling 
+
+exports.deleteTask = async (req, res) => {
+
+	//  wrap the code inside the try and catch 
+
+	try {
+
+		// for  dynamic paramters , we are getting data not from body
+		//  but from url itself
+		const task_id = req.params.id
+
+		// directly provide id or {_id: task_id}
+		// below  ways is recommneded
+		const response = await taskSchema.findByIdAndDelete(task_id);
+
+		return res.status(200)
+			.json({
+				success: true,
+				message: "task is deleted succesfully",
+				data: response
+			})
+
+
+	}
+	catch (error) {
+		console.log(error)
+
+		return res.status(500)
+			.json({
+				success: false,
+				message: "Internal error occured from server"
+			})
+
+		//  sending response from here 
+		//  only when the error is occured 
+
+	}
+
+
+}
+
+
+
+exports.updateTask = async (req, res) => {
+	try {
+
+		const task_id = req.params.id
+		const task_name = req.body.task_name;
+		const task_desc = req.body.task_desc;
+		//  even thorugh the task is updated in db still findbyidAdnUpdate method return the old document 
+
+		// {new:true} : means the document is returned which is upadted 
+		const response = await taskSchema.findByIdAndUpdate(task_id, { task_name, task_desc }, { new: true });
+
+		return res.status(200)
+			.json({
+				success: true,
+				message: "task is updated succesfully",
+				data: response
+			})
+
+	}
+	catch (error) {
+		console.log(error)
+
+		return res.status(500)
+			.json({
+				success: false,
+				message: "Internal error occured from server"
+			})
+
+	}
 
 }

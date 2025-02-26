@@ -20,8 +20,11 @@ app.get("/", (req, res) => {
 // 3. create the controller 
 // 4. then map it like below
 
-const { createTask } = require("./controllers/task");
+const { createTask, getAllTask, deleteTask, updateTask } = require("./controllers/task");
 app.post("/tasks", createTask)
+app.get("/tasks", getAllTask)
+app.delete("/tasks/:id", deleteTask)
+app.put("/tasks/:id", updateTask)
 
 
 
