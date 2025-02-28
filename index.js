@@ -20,12 +20,21 @@ app.get("/", (req, res) => {
 // 3. create the controller 
 // 4. then map it like below
 
-const { createTask, getAllTask, deleteTask, updateTask } = require("./controllers/task");
-app.post("/tasks", createTask)
-app.get("/tasks", getAllTask)
-app.delete("/tasks/:id", deleteTask)
-app.put("/tasks/:id", updateTask)
+// const { createTask, getAllTask, deleteTask, updateTask } = require("./controllers/task");
+// app.post("/tasks", createTask)
+// app.get("/tasks", getAllTask)
+// app.delete("/tasks/:id", deleteTask)
+// app.put("/tasks/:id", updateTask)
 
+// it is not recommmneded to export somethig from index.js 
+//  if it is needded then u can do that , but try to avoid 
+
+const taskRoutes = require("./routes/taskRoutes");
+
+// mapping of the routes with the server application 
+// mapping ofn the routes
+app.use("/api/v1/tasks", taskRoutes)
+// http://localhost:4000/
 
 
 const dbConnect = require("./config/dbConnect");
