@@ -7,13 +7,29 @@ const app = express();
 // middlewares , to accept the data from client 
 app.use(express.json())
 
-app.get("/", (req, res) => {
+
+
+
+const serverCheck = (req, res) => {
 	return res.status(200)
+
 		.json({
 			success: true,
 			message: "server is up and running "
 		})
-})
+}
+// middlewares : custom , logging , authentication , authorization 
+
+
+
+app.get("/",
+	// middleware
+	(req, res, next) => {
+		console.log("hello from server")
+		// calling to the next middleware or function or controller via next (0)
+		next()
+	}
+	, serverCheck)
 
 //  flow : 1. create the mongodb connection separately 
 // 2. create the models then 
