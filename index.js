@@ -52,6 +52,10 @@ const taskRoutes = require("./routes/taskRoutes");
 app.use("/api/v1/tasks", taskRoutes)
 // http://localhost:4000/
 
+const authRoutes = require("./routes/authRoutes")
+app.use("/api/v1/auth", authRoutes)
+
+
 
 const dbConnect = require("./config/dbConnect");
 dbConnect()
