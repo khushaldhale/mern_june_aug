@@ -90,23 +90,55 @@ exports.login = async (req, res) => {
 		//  as we have hashed it then we have to  compare it or match it via bcrypt 
 
 		//  it return boolean values , if matched then true else  false 
+
+		console.log("resonse : ", await bcrypt.compare(password, is_existing.password))
 		if (await bcrypt.compare(password, is_existing.password)) {
 			//  generate  a token
 			//   it is not promise , ity is sync code 
 			//  two para: payload, signature 
 			const token = jwt.sign(
 				{
+					//   here u can provide both  username / email and password
+					//  but it is always recommedned to provide data which is requied for aut
+					//  authentication and authorization only 
+					//  the key which is unique in document , which  can be used for authentication
+					//  confidentual data should  not be provided , if hacker hacks then it willl causse a problem
+
+
 					email: email
+					//  email , _id
 				},
-				"khushal123#321"
+
+				//  signature  for hashing 
+				"khushal123#321", {
+				//  set an expiry of token
+			}
 			)
-			return res.status(200)
+
+
+			//  sending response as a cookie
+
+			//  cookie name, cookie value,  options
+			res.cookie("token", token, {
+				//  localstorage: it can be accesiible via js also
+
+				httpOnly: true, //  now cookies is accessible via httpp only 
+				// httpOnly:false,   now cookies can be acccessible via js and http both , 
+
+
+				// set an  expiry for the cokkis
+
+				expires: new Date(Date.now() + 1000 * 60)
+
+			})
+				.status(200)
 				.json({
 					success: true,
-					message: " you are logged in  ",
-					token,
+					message: "user is logged in succefully ",
 					data: is_existing
 				})
+
+
 
 		} else {
 			return res.status(400)
