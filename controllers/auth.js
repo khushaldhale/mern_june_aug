@@ -105,13 +105,15 @@ exports.login = async (req, res) => {
 					//  confidentual data should  not be provided , if hacker hacks then it willl causse a problem
 
 
-					email: email
+					email: email,
+					_id: is_existing._id
 					//  email , _id
 				},
 
 				//  signature  for hashing 
 				"khushal123#321", {
 				//  set an expiry of token
+				expiresIn: "5m"
 			}
 			)
 
@@ -128,7 +130,7 @@ exports.login = async (req, res) => {
 
 				// set an  expiry for the cokkis
 
-				expires: new Date(Date.now() + 1000 * 60)
+				expires: new Date(Date.now() + 1000 * 60 * 5)
 
 			})
 				.status(200)

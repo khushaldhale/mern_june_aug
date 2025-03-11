@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
 				type: mongoose.Schema.Types.ObjectId,
 				//  which collection or table u are referencing too 
 				ref: "task",
-				required: true
+
 
 			}
 		],

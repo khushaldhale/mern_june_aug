@@ -1,5 +1,6 @@
 
-const taskSchema = require("../models/task")
+const taskSchema = require("../models/task");
+const userSchema = require("../models/user");
 
 // ./ siblings , ../ parent , / child
 
@@ -17,6 +18,7 @@ exports.createTask = async (req, res) => {
 	const task_name = req.body.task_name;
 	const task_desc = req.body.task_desc;
 
+	const user_id = req.payload._id
 
 	// 2. dump it in db, collection
 
@@ -27,6 +29,12 @@ exports.createTask = async (req, res) => {
 	// create method wants object , that object will be dumped in the collection
 	// it return the document which is inserted in the collection
 	const response = await taskSchema.create({ task_name: task_name, task_desc: task_desc });
+
+
+	// Another phase
+
+	//  task is created and map it with user schema
+	const user = await userSchema.findByIdAndUpdate(user_id, { $push: { tasks: response._id } }, { new: true })
 
 	return res.status(200)
 		.json(

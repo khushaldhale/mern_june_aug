@@ -1,14 +1,18 @@
 
 const express = require("express");
 const app = express();
-
+const { authentication } = require("./middlewares/authentication")
 
 
 // middlewares , to accept the data from client 
 app.use(express.json())
 
+// so u need cookie parser whenever u hve to accept cookies 
+// npm i cookie-parser
 
-
+// cookies are imported
+const cookies = require("cookie-parser");
+app.use(cookies()) // middleware for the cookies are attached 
 
 const serverCheck = (req, res) => {
 	return res.status(200)
@@ -30,6 +34,21 @@ app.get("/",
 		next()
 	}
 	, serverCheck)
+
+
+
+// testing of auth module
+
+app.get("/token/auth", authentication, (req, res) => {
+
+	console.log("payload in my controller is : ", req.payload.email, req.payload._id)
+	return res.status(200)
+		.json({
+			success: true,
+			message: "This is actual controller"
+		})
+})
+
 
 //  flow : 1. create the mongodb connection separately 
 // 2. create the models then 
@@ -58,6 +77,7 @@ app.use("/api/v1/auth", authRoutes)
 
 
 const dbConnect = require("./config/dbConnect");
+
 dbConnect()
 
 

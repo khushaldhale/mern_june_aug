@@ -2,12 +2,13 @@
 //  using expresss , router function to create and map routes 
 const express = require("express");
 const { updateTask, createTask, getAllTask, deleteTask } = require("../controllers/task");
+const { authentication } = require("../middlewares/authentication");
 const router = express.Router()
 
 
 
 router.put("/:id", updateTask)
-router.post("/", createTask)
+router.post("/", authentication, createTask)
 router.get("/", getAllTask)
 router.delete("/:id", deleteTask)
 
