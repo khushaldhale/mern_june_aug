@@ -160,3 +160,32 @@ exports.login = async (req, res) => {
 			})
 	}
 }
+
+
+
+exports.logout = async (req, res) => {
+	try {
+
+		// remove the token,
+		// insted u override + remove the token 
+
+		return res.cookie("token", null, {
+			httpOnly: true,
+			expires: new Date(Date.now())
+		})
+			.status(200)
+			.json({
+				success: true,
+				message: 'user is logged out succesfully '
+			})
+
+	}
+	catch (error) {
+		console.log(error)
+		return res.status(500)
+			.json({
+				success: false,
+				message: "Internal error occured"
+			})
+	}
+}

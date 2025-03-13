@@ -31,7 +31,8 @@ exports.authentication = async (req, res, next) => {
 					message: "Token is invalid, kindly login again  "
 				})
 		}
-		req.payload = payload
+		req.payload = payload;
+		console.log("payload is : ", req.payload)
 
 		next();
 

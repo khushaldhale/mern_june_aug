@@ -51,13 +51,18 @@ exports.createTask = async (req, res) => {
 
 exports.getAllTask = async (req, res) => {
 
-	const response = await taskSchema.find({});
+	// const response = await taskSchema.find({});
+
+
+	const user_id = req.payload._id;
+
+	const response = await userSchema.findById(user_id).populate("tasks")
 
 	return res.status(200)
 		.json({
 			success: true,
 			message: "all tasks are fetched succesfully",
-			data: response
+			data: response.tasks
 		})
 
 }
@@ -79,9 +84,17 @@ exports.deleteTask = async (req, res) => {
 		//  but from url itself
 		const task_id = req.params.id
 
+		const user_email = req.payload.email;
 		// directly provide id or {_id: task_id}
 		// below  ways is recommneded
 		const response = await taskSchema.findByIdAndDelete(task_id);
+		//  task is deleted from task collection
+
+		//  but we have to remove the reference also  fromuser collection , docuemnt 
+
+		//  find the document and remove reference from it 
+		const user = await userSchema.findOneAndUpdate({ email: user_email }, { $pull: { tasks: task_id } }, { new: true })
+
 
 		return res.status(200)
 			.json({
